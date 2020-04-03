@@ -21,10 +21,11 @@ void CheckSyntax::checkDelimeters(){
 
   GenStack<char> s(50);
   string line;
-  int lineCount = 0;
+  int lineCount = 1;
 
-    while(getline(inputFile, line)) {
-      cout << "here" << endl;
+  while(getline(inputFile, line)) {
+    //cout << "here" << endl;
+    try{
       for(int i = 0; i < line.length(); ++i){
         if (!is_a_delimiter(line[i])) {
             continue;
@@ -33,33 +34,44 @@ void CheckSyntax::checkDelimeters(){
             s.push(line[i]);
         } else {
             if (s.peek()=='(' && line[i] != ')') {
-              cout << "Line " << lineCount << "expected ')' and found" << line[i] << endl;
+              cout << "Line " << lineCount << " expected ')' and found " << line[i] << endl;
               return;
             } else {
                 s.pop();
                 continue;
             }
             if(s.peek() == '[' && line[i] != ']'){
-              cout << "Line " << lineCount << "expected ']' and found" << line[i] << endl;
+              cout << "Line " << lineCount << " expected ']' and found " << line[i] << endl;
               return;
             } else{
               s.pop();
               continue;
             }
             if(s.peek() == '{' && line[i] != '}'){
-              cout << "Line " << lineCount << "expected '}' and found" << line[i] << endl;
+              cout << "Line " << lineCount << " expected '}' and found " << line[i] << endl;
               return;
             } else{
               s.pop();
               continue;
             }
+          }
         }
-      ++lineCount;
-    }
-    if(s.isEmpty() == 0){
-      cout << "Reached end of file: Missing the opposite of " << s.peek() << endl;
-    }
+      }
+        catch(underflow_error e){
+          cout << "Line " << lineCount << " found without starting delimeter." << endl;
+          return;
+        }
+
+    ++lineCount;
+
+  if(!s.isEmpty()){
+    cout << "Reached end of file: Missing the opposite of " << s.peek() << " on line " << lineCount << endl;
+  }
+  else{
+    cout << "File is complete." << endl;
+  }
 }
+
 }
 
 bool CheckSyntax::is_a_delimiter(char c){

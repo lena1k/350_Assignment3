@@ -10,26 +10,23 @@ using namespace std;
 
 template <class T>
 class GenStack{
+private:
+
+  int top;
+  int capacity;
+  T *arr;
+
 public:
 
   GenStack(int size);
   ~GenStack();
-  // int *arr;
-  int top;
-  int capacity;
 
   void push(T x);
   T pop();
   T peek();
   int isFull();
-  int isEmpty();
-  //int size();
+  bool isEmpty();
   void resizeArray();
-
-
-
-  T *tempArray;
-  T *arr;
 
 };
 
@@ -39,43 +36,38 @@ GenStack<T>::GenStack(int size){
   arr = new T[size];
   capacity = size;
   top = -1;
-  tempArray = new T[capacity];
 }
 
 // destructor
 template <class T>
 GenStack<T>::~GenStack(){
   delete []arr;
-  delete []tempArray;
 }
 
 template <class T>
 void GenStack<T>::push(T x){
-  if(this->isFull() == 1){
+  if(this->isFull()){
     this->resizeArray();
-    push(x);
   }
-  arr[++top] = x;
-}
+    arr[++top] = x;
+  }
+
 
 template <class T>
 T GenStack<T>::pop(){
-  cout << "here now" << endl;
-  if(isEmpty() == 1){
+  if(isEmpty()){
     throw underflow_error("Stack is underflowed.");
-    //exit(1);
   }
   return arr[top--];
 }
 
+
 template<class T>
 T GenStack<T>::peek(){
-  if(!isEmpty() == 1){
-    return arr[top];
+  if(top == -1){
+    throw underflow_error("Stack is underflowed.");
   }
-  else{
-    return ' ';
-  }
+  return arr[top];
 }
 
 
@@ -86,22 +78,21 @@ int GenStack<T>::isFull(){
 }
 
 template <class T>
-int GenStack<T>::isEmpty(){
-
-  --top;
-  return top;
+bool GenStack<T>::isEmpty(){
+  return (top == -1);
 }
 
 //allocates more room to Stack
 template <class T>
 void GenStack<T>::resizeArray(){
-  tempArray = new T[capacity];
-  for(int i = top; i > -1; --i){
+  int new_capacity = 2 * capacity;
+  T *tempArray = new T[new_capacity];
+  for(int i = 0; i < top; ++i){
     tempArray[i] = arr[i];
   }
-  ++capacity;
-  arr = new T[capacity];
-  for(int i = top; i > -1; --i){
-    arr[i] = tempArray[i];
-  }
+  T *old_arr = arr;
+  arr = tempArray;
+  capacity = new_capacity;
+  delete old_arr;
+
 }
