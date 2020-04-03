@@ -7,6 +7,7 @@
 using namespace std;
 
 class CheckSyntax {
+  // constant variables to refer to delimeters
   const char* delimiters = "(){}[]";
   const char* startDelimeters = "({[";
   ifstream inputFile;

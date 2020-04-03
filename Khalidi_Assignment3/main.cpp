@@ -23,11 +23,16 @@ int main(int argc, char** argv){
     cin >> fileName;
 
     inputStream.open(fileName);
+    // if file exists
     if (inputStream) {
+      // create CheckSyntax object
       CheckSyntax* cs = new CheckSyntax(fileName);
+      // point to function in CheckSyntax
       cs->checkDelimeters();
+      //delete object
       delete cs;
-    } else {
+
+    } else { // if file does not exist
       cout << endl << ("The file does not exist. ");
     }
     inputStream.close();

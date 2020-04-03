@@ -11,7 +11,6 @@ using namespace std;
 template <class T>
 class GenStack{
 private:
-
   int top;
   int capacity;
   T *arr;
@@ -44,6 +43,7 @@ GenStack<T>::~GenStack(){
   delete []arr;
 }
 
+// inserts element at top
 template <class T>
 void GenStack<T>::push(T x){
   if(this->isFull()){
@@ -52,31 +52,34 @@ void GenStack<T>::push(T x){
     arr[++top] = x;
   }
 
-
+// removes top element
 template <class T>
 T GenStack<T>::pop(){
   if(isEmpty()){
+    // throw error if stack is underflowed
     throw underflow_error("Stack is underflowed.");
   }
   return arr[top--];
 }
 
-
+// top element
 template<class T>
 T GenStack<T>::peek(){
   if(top == -1){
+    // throw error if stack is underflowed
     throw underflow_error("Stack is underflowed.");
   }
   return arr[top];
 }
 
-
+// check if full
 template<class T>
 int GenStack<T>::isFull(){
 
   return top == (capacity - 1);
 }
 
+// check if empty
 template <class T>
 bool GenStack<T>::isEmpty(){
   return (top == -1);
@@ -85,11 +88,14 @@ bool GenStack<T>::isEmpty(){
 //allocates more room to Stack
 template <class T>
 void GenStack<T>::resizeArray(){
+  // creating a new capacity with twice as much space as original
   int new_capacity = 2 * capacity;
   T *tempArray = new T[new_capacity];
+  // everything from original array into temp array
   for(int i = 0; i < top; ++i){
     tempArray[i] = arr[i];
   }
+  // old array becomes array
   T *old_arr = arr;
   arr = tempArray;
   capacity = new_capacity;
